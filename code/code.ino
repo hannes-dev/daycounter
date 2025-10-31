@@ -1,9 +1,8 @@
-// Define the specific pins for your ESP32-C3 SuperMini
-const int dataPin  = 5;  // DIN on MAX7219 (Your MOSI pin)
-const int csPin    = 10; // CS/LOAD on MAX7219
-const int clockPin = 4;  // CLK on MAX7219 (Your SCK pin)
 
-// --- MAX7219 Command Registers ---
+const int dataPin  = 5;  // DIN
+const int csPin    = 10; // CS/LOAD
+const int clockPin = 4;  // CLK
+
 const byte REG_DECODE_MODE   = 0x09;
 const byte REG_INTENSITY  = 0x0A;
 const byte REG_SCAN_LIMIT    = 0x0B;
@@ -16,29 +15,19 @@ const byte DIGITS[] = {
   };
 
 void setup() {
-  // Set our control pins as outputs
   pinMode(dataPin, OUTPUT);
   pinMode(csPin, OUTPUT);
   pinMode(clockPin, OUTPUT);
 
-  // --- Initialize the MAX7219 ---
-  
-  // 1. Take the chip out of shutdown mode to turn it on.
-  sendCommand(REG_SHUTDOWN, 1); // 1 = Normal Operation
-
-  // 2. Set the scan limit (how many digits to display). 7 means all 8 digits (0-7).
-  sendCommand(REG_SCAN_LIMIT, 4);
-
-  // 3. Disable font decoding, as we are controlling it directly.
-  sendCommand(REG_DECODE_MODE, 0);
+  sendCommand(REG_SHUTDOWN, 1); // 1 = normal operation
+  sendCommand(REG_SCAN_LIMIT, 4); // how many digits to display
+  sendCommand(REG_DECODE_MODE, 0); // disable font decoding
   
   sendCommand(REG_INTENSITY, 0x01);
 
-  // --- GOAL: Put the display in test mode ---
-  // This command tells the chip to turn on all LEDs.
-  sendCommand(REG_DISPLAY_TEST, 1); // 1 = Test Mode ON
+  sendCommand(REG_DISPLAY_TEST, 1); // 1 = test mode on
   delay(1000);
-  sendCommand(REG_DISPLAY_TEST, 0); // 1 = Test Mode ON
+  sendCommand(REG_DISPLAY_TEST, 0); // 1 = test mode off
   delay(1000);
 }
 
